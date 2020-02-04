@@ -31,6 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 此处重载是为了使我们的UserProfile生效
+AUTH_USER_MODEL = "users.UserProfile"
 
 # Application definition
 
@@ -41,6 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'DjangoUeditor'
+    'users',
+    'goods',
+    'trade',
+    'user_operation',
 ]
 
 MIDDLEWARE = [
