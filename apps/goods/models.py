@@ -18,7 +18,7 @@ class GoodsCategory(models.Model):
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="类别code")
     desc = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
     # 设置目录树的级别
-    category_type = models.CharField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
+    category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
     # 设置models有一个指向自己的外键
     parent_category = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, verbose_name="父类目级别", help_text="父目录",
                                         related_name="sub_cat")
@@ -37,6 +37,7 @@ class GoodsCategoryBrand(models.Model):
     """
     品牌名
     """
+    category = models.ForeignKey(GoodsCategory, on_delete=models.CASCADE, related_name='brands', null=True, blank=True, verbose_name="商品类目")
     name = models.CharField(default="", max_length=30, verbose_name="品牌名", help_text="品牌名")
     desc = models.TextField(default="", max_length=200, verbose_name="品牌描述", help_text="品牌描述")
     image = models.ImageField(max_length=200, upload_to="brands/")
