@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'user_operation.apps.UserOperationConfig',
     'crispy_forms',
     'xadmin',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,20 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# 所有drf相关的设置
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # PageNumberPagination 分页风格
+    'PAGE_SIZE': 10,  # 每页多少条记录
+}

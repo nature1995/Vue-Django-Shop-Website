@@ -16,15 +16,34 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf.urls import url
-import xadmin
+from django.views.static import serve
 
 from VueDjangoShopWebsite.settings import MEDIA_ROOT
-from django.views.static import serve
+from rest_framework.documentation import include_docs_urls
+from rest_framework.routers import DefaultRouter
+from goods.views import GoodsListViewSet
+import xadmin
+
+# goods_list = GoodsListViewSet.as_view({
+#     'get': 'list',
+# })
+router = DefaultRouter()
+
+# 配置goods的url
+router.register(r'goods', GoodsListViewSet, basename="goods")
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     url(r'^xadmin/', xadmin.site.urls),
+    # 调试登录
+    url(r'^api-auth/', include('rest_framework.urls')),
     # 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，传入配置好的MEDIAROOT
     re_path('media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
+    # 商品列表页
+    # url(r'goods/$', goods_list, name="goods-list"),
+    path('', include(router.urls)),
+    # 自动生成文档
+    url(r'docs/', include_docs_urls(title="生鲜超市API文档")),
+
 
 ]
