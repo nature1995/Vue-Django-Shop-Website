@@ -9,7 +9,7 @@ from goods.models import Goods, GoodsCategory, GoodsImage
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = GoodsCategory
-        fields = "__all__"
+        fields = '__all__'
 
 
 # class GoodsImageSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class GoodsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goods
         # fields = ('category', 'goods_sn', 'name', 'click_num', 'sold_num', 'market_price')
-        fields = "__all__"
+        fields = '__all__'
 
 
 # class GoodsSerializer(serializers.Serializer):

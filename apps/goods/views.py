@@ -9,7 +9,10 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import viewsets
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Goods
+from .filters import GoodsFilter
 
 
 class GoodsPagination(LimitOffsetPagination):
@@ -48,10 +51,22 @@ class GoodsListView(generics.ListAPIView):
 
 class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    商品列表页
+    商品列表页，分页，搜索，过滤，排序
     """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter, )
+    filter_class = GoodsFilter
+    # filterset_fields = ['name', 'shop_price']
+    search_fields = ['name', 'goods_brief', 'goods_desc']
+    ordering_fields = ['sold_num', 'add_time']
+
+    # def get_queryset(self):
+    #     queryset = Goods.objects.all()
+    #     price_min = self.request.query_params.get("price_min", 0)
+    #     if price_min:
+    #         queryset = Goods.objects.filter(shop_price__gt=int(price_min))
+    #     return queryset
 
 
