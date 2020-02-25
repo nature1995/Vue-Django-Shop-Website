@@ -21,7 +21,8 @@ from django.views.static import serve
 from VueDjangoShopWebsite.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
-from goods.views import GoodsListViewSet
+from rest_framework.authtoken import views
+from goods.views import GoodsListViewSet, CategoryViewset
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -31,6 +32,8 @@ router = DefaultRouter()
 
 # 配置goods的url
 router.register(r'goods', GoodsListViewSet, basename="goods")
+# 配置category的url
+router.register(r'categorys', CategoryViewset, basename="categorys")
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -44,6 +47,5 @@ urlpatterns = [
     path('', include(router.urls)),
     # 自动生成文档
     url(r'docs/', include_docs_urls(title="生鲜超市API文档")),
-
-
+    url(r'^api-token-auth/', views.obtain_auth_token)
 ]
