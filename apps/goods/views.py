@@ -9,12 +9,19 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import (
+    SessionAuthentication, BasicAuthentication, TokenAuthentication
+)
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Goods, GoodsCategory
+from .models import (
+    Goods, GoodsCategory
+)
 from .filters import GoodsFilter
-from .serializers import GoodsSerializer, CategorySerializer
+from .serializers import (
+    GoodsSerializer, CategorySerializer
+)
 
 
 class GoodsPagination(PageNumberPagination):
@@ -53,20 +60,20 @@ class GoodsListView(generics.ListAPIView):
     pagination_class = GoodsPagination
 
 
-class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     商品列表页，分页，搜索，过滤，排序
     """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination
-    authentication_classes = [SessionAuthentication, SessionAuthentication, TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = (BasicAuthentication, SessionAuthentication, JWTAuthentication, )
+    # permission_classes = [IsAuthenticated]
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter, )
     filter_class = GoodsFilter
     # filterset_fields = ['name', 'shop_price']
-    search_fields = ['name', 'goods_brief', 'goods_desc']
-    ordering_fields = ['sold_num', 'shop_price']
+    search_fields = ('name', 'goods_brief', 'goods_desc')
+    ordering_fields = ('sold_num', 'shop_price')
 
     # def get_queryset(self):
     #     queryset = Goods.objects.all()
@@ -85,5 +92,4 @@ class CategoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
-
 

@@ -22,7 +22,13 @@ from VueDjangoShopWebsite.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 from goods.views import GoodsListViewSet, CategoryViewset
+from users.views import SmsCodeViewset, UserViewset
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -34,6 +40,11 @@ router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet, basename="goods")
 # 配置category的url
 router.register(r'categorys', CategoryViewset, basename="categorys")
+# 配置codes的url
+router.register(r'code', SmsCodeViewset, basename="code")
+# 配置users的url
+router.register(r'users', UserViewset, basename="users")
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -47,5 +58,10 @@ urlpatterns = [
     path('', include(router.urls)),
     # 自动生成文档
     url(r'docs/', include_docs_urls(title="生鲜超市API文档")),
-    url(r'^api-token-auth/', views.obtain_auth_token)
+    # drf自带的token授权登录,获取token需要向该地址post数据
+    url(r'^api-token-auth/', views.obtain_auth_token),
+
+    url(r'^login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    url(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    url(r'^api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
