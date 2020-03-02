@@ -29,6 +29,7 @@ from rest_framework_simplejwt.views import (
 )
 from goods.views import GoodsListViewSet, CategoryViewset
 from users.views import SmsCodeViewset, UserViewset
+from user_operation.views import UserFavViewset
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -44,6 +45,8 @@ router.register(r'categorys', CategoryViewset, basename="categorys")
 router.register(r'code', SmsCodeViewset, basename="code")
 # 配置users的url
 router.register(r'users', UserViewset, basename="users")
+# 配置用户收藏的url
+router.register(r'userfavs', UserFavViewset, basename="userfavs")
 
 
 urlpatterns = [
@@ -61,7 +64,7 @@ urlpatterns = [
     # drf自带的token授权登录,获取token需要向该地址post数据
     url(r'^api-token-auth/', views.obtain_auth_token),
 
-    url(r'^login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    url(r'^login/', TokenObtainPairView.as_view(), name='login'),
     url(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     url(r'^api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
