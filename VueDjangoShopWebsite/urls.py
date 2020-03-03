@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import (
 )
 from goods.views import GoodsListViewSet, CategoryViewset
 from users.views import SmsCodeViewset, UserViewset
-from user_operation.views import UserFavViewset, LeavingMessageViewset
+from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -49,6 +49,8 @@ router.register(r'users', UserViewset, basename="users")
 router.register(r'userfavs', UserFavViewset, basename="userfavs")
 # 配置用户留言的url
 router.register(r'messages', LeavingMessageViewset, basename="messages")
+# 收货地址
+router.register(r'address', AddressViewset, basename="address")
 
 
 urlpatterns = [
