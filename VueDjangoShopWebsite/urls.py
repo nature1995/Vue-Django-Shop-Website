@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import (
 )
 from goods.views import GoodsListViewSet, CategoryViewset
 from users.views import SmsCodeViewset, UserViewset
-from user_operation.views import UserFavViewset
+from user_operation.views import UserFavViewset, LeavingMessageViewset
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -47,6 +47,8 @@ router.register(r'code', SmsCodeViewset, basename="code")
 router.register(r'users', UserViewset, basename="users")
 # 配置用户收藏的url
 router.register(r'userfavs', UserFavViewset, basename="userfavs")
+# 配置用户留言的url
+router.register(r'messages', LeavingMessageViewset, basename="messages")
 
 
 urlpatterns = [
@@ -60,7 +62,7 @@ urlpatterns = [
     # url(r'goods/$', goods_list, name="goods-list"),
     path('', include(router.urls)),
     # 自动生成文档
-    url(r'docs/', include_docs_urls(title="生鲜超市API文档")),
+    url(r'docs/', include_docs_urls(title="生鲜超市文档")),
     # drf自带的token授权登录,获取token需要向该地址post数据
     url(r'^api-token-auth/', views.obtain_auth_token),
 
