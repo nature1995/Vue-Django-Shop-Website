@@ -28,6 +28,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from goods.views import GoodsListViewSet, CategoryViewset
+from trade.views import ShopCartViewset, OrderViewset
 from users.views import SmsCodeViewset, UserViewset
 from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
 import xadmin
@@ -42,7 +43,7 @@ router.register(r'goods', GoodsListViewSet, basename="goods")
 # 配置category的url
 router.register(r'categorys', CategoryViewset, basename="categorys")
 # 配置codes的url
-router.register(r'code', SmsCodeViewset, basename="code")
+router.register(r'codes', SmsCodeViewset, basename="codes")
 # 配置users的url
 router.register(r'users', UserViewset, basename="users")
 # 配置用户收藏的url
@@ -51,6 +52,10 @@ router.register(r'userfavs', UserFavViewset, basename="userfavs")
 router.register(r'messages', LeavingMessageViewset, basename="messages")
 # 收货地址
 router.register(r'address', AddressViewset, basename="address")
+# 购物车
+router.register(r'shopcarts', ShopCartViewset, basename="shopcarts")
+# 订单相关url
+router.register(r'orders', OrderViewset, basename="orders")
 
 
 urlpatterns = [

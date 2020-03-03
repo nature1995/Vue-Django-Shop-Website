@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="vuedjango">
+    <serverData>
+      <paths name="vuedjango">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/root/nature/vuedjango" local="$PROJECT_DIR$" web="http://139.9.118.108" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
