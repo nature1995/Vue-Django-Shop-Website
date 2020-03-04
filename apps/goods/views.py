@@ -16,11 +16,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import (
-    Goods, GoodsCategory
+    Goods, GoodsCategory, Banner
 )
 from .filters import GoodsFilter
 from .serializers import (
-    GoodsSerializer, CategorySerializer
+    GoodsSerializer, CategorySerializer, BannerSerializer
 )
 
 
@@ -92,4 +92,12 @@ class CategoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
+
+
+class BannerViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    获取轮播图列表
+    """
+    queryset = Banner.objects.all().order_by("index")
+    serializer_class = BannerSerializer
 

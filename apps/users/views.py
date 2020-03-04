@@ -58,55 +58,27 @@ class SmsCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         return "".join(random_str)
 
-    def create(self, request, *args, **kwargs):
-        """
-        使用云片发送短信
-        """
-        serializer = self.get_serializer(data=request.data)
-        # 验证合法
-        serializer.is_valid(raise_exception=True)
-        mobile = serializer.validated_data["mobile"]
-
-        # 使用云片发送短信
-        yun_pian = YunPian(APIKEY)
-
-        # 生成验证码
-        code = self.generate_code()
-
-        # 使用云片发送短信
-        sms_status = yun_pian.send_sms(code=code, mobile=mobile)
-
-        if sms_status["code"] != 0:
-            return Response({
-                "mobile": sms_status["msg"]
-            }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            code_record = VerifyCode(code=code, mobile=mobile)
-            code_record.save()
-            return Response({
-                "mobile": mobile
-            }, status=status.HTTP_201_CREATED)
-
     # def create(self, request, *args, **kwargs):
     #     """
-    #     使用腾讯云短信平台发送短信
+    #     使用云片发送短信
     #     """
     #     serializer = self.get_serializer(data=request.data)
     #     # 验证合法
     #     serializer.is_valid(raise_exception=True)
     #     mobile = serializer.validated_data["mobile"]
     #
-    #     # 使用腾讯云短信平台发送短信
-    #     tencent_sms = TencentSms(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
+    #     # 使用云片发送短信
+    #     yun_pian = YunPian(APIKEY)
     #
     #     # 生成验证码
     #     code = self.generate_code()
     #
-    #     sms_status = tencent_sms.send_sms(code=code, mobile="+86".join(mobile))
+    #     # 使用云片发送短信
+    #     sms_status = yun_pian.send_sms(code=code, mobile=mobile)
     #
-    #     if sms_status["SendStatusSet"][0]["Code"] != 0:
+    #     if sms_status["code"] != 0:
     #         return Response({
-    #             "mobile": sms_status["SendStatusSet"][0]["Message"]
+    #             "mobile": sms_status["msg"]
     #         }, status=status.HTTP_400_BAD_REQUEST)
     #     else:
     #         code_record = VerifyCode(code=code, mobile=mobile)
@@ -114,6 +86,34 @@ class SmsCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     #         return Response({
     #             "mobile": mobile
     #         }, status=status.HTTP_201_CREATED)
+
+    def create(self, request, *args, **kwargs):
+        """
+        使用腾讯云短信平台发送短信
+        """
+        serializer = self.get_serializer(data=request.data)
+        # 验证合法
+        serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data["mobile"]
+
+        # 使用腾讯云短信平台发送短信
+        tencent_sms = TencentSms(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
+
+        # 生成验证码
+        code = self.generate_code()
+
+        sms_status = tencent_sms.send_sms(code=code, mobile=mobile)
+
+        if sms_status["SendStatusSet"][0]["Message"] != "send success":
+            return Response({
+                "mobile": sms_status["SendStatusSet"][0]["Message"]
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            code_record = VerifyCode(code=code, mobile=mobile)
+            code_record.save()
+            return Response({
+                "mobile": mobile
+            }, status=status.HTTP_201_CREATED)
 
 
 class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):

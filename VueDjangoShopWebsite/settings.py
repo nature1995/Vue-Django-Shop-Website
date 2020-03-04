@@ -72,6 +72,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
+    'http://127.0.0.1:8000',
 )
 
 CORS_ALLOW_METHODS = (
@@ -223,3 +224,8 @@ TENCENT_SECRET_KEY = ''
 # 支付宝相关的key路径
 private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
 ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
+
+try:
+    from .local_settings import *
+except:
+    pass

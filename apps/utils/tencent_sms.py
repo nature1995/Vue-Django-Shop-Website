@@ -14,22 +14,20 @@ from VueDjangoShopWebsite.settings import (
 
 
 class TencentSms(object):
+
+    httpProfile = HttpProfile()
+    httpProfile.endpoint = "sms.tencentcloudapi.com"
+
+    clientProfile = ClientProfile()
+    clientProfile.httpProfile = httpProfile
+
     def __init__(self, secretId, secretKey):
         """
         传入用户参数
         :param secretId: 在云API密钥上申请的标识身份的 SecretId，一个 SecretId 对应唯一的 SecretKey。
         :param secretKey: 用来生成请求签名 Signature。
         """
-        try:
-            cred = credential.Credential(secretId, secretKey)
-            self.httpProfile = HttpProfile()
-            self.httpProfile.endpoint = "sms.tencentcloudapi.com"
-
-            self.clientProfile = ClientProfile()
-            self.clientProfile.httpProfile = self.httpProfile
-            self.client = sms_client.SmsClient(cred, "ap-beijing", self.clientProfile)
-        except TencentCloudSDKException as err:
-            print(err)
+        self.cred = credential.Credential(secretId, secretKey)
 
     def send_sms(self, code, mobile):
         """
@@ -38,21 +36,25 @@ class TencentSms(object):
         :param mobile: 手机号，例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号
         :return:
         """
-        req = models.SendSmsRequest()
-        req.TemplateID = "543954"
-        req.PhoneNumberSet = [mobile]
-        req.Sign = "然小狼"
-        req.TemplateParamSet = [code]
-        req.SmsSdkAppid = "1400324019"
+        try:
+            client = sms_client.SmsClient(self.cred, "ap-beijing", self.clientProfile)
+            req = models.SendSmsRequest()
+            req.TemplateID = "543954"
+            req.PhoneNumberSet = [str("+86"+mobile)]
+            req.Sign = "然小狼"
+            req.TemplateParamSet = [code]
+            req.SmsSdkAppid = "1400324019"
 
-        resp = self.client.SendSms(req)
-        print(resp.to_json_string())
-        re_dict = json.loads(resp.to_json_string())
-        print(re_dict)
-        return re_dict
+            resp = client.SendSms(req)
+            re_dict = json.loads(resp.to_json_string())
+            return re_dict
+
+        except TencentCloudSDKException as err:
+            print(err)
+            pass
 
 
 if __name__ == "__main__":
     tencent_sms = TencentSms(TENCENT_SECRET_ID, TENCENT_SECRET_KEY)
-    msg = tencent_sms.send_sms("2020", "+8613711112222")
+    msg = tencent_sms.send_sms("2020", "+8615600565987")
     print(msg)
