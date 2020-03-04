@@ -29,7 +29,7 @@ SECRET_KEY = '4x_=dj($maxn@i+@^k_w=td=i%t=7424trg80aube_8f-%0sb('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # 此处重载是为了使我们的UserProfile生效
 AUTH_USER_MODEL = "users.UserProfile"
@@ -124,7 +124,7 @@ WSGI_APPLICATION = 'VueDjangoShopWebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vuedjango',
+        'NAME': 'online_vuedjango',
         'USER': 'root',
         'PASSWORD': 'gongziran',
         'HOST': '127.0.0.1',

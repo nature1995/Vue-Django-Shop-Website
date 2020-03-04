@@ -141,6 +141,8 @@ yarn-error.log
 
 .DS_Store
 
-VueDjangoShopWebsite/local_setting.py
+VueDjangoShopWebsite/local_settings.py
 
 *.xml
+
+.idea/VueDjangoShopWebsite.iml
