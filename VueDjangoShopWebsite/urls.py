@@ -28,7 +28,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from goods.views import GoodsListViewSet, CategoryViewset
-from trade.views import ShopCartViewset, OrderViewset
+from trade.views import ShopCartViewset, OrderViewset, AlipayView
 from users.views import SmsCodeViewset, UserViewset
 from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
 import xadmin
@@ -72,6 +72,9 @@ urlpatterns = [
     url(r'docs/', include_docs_urls(title="生鲜超市文档")),
     # drf自带的token授权登录,获取token需要向该地址post数据
     url(r'^api-token-auth/', views.obtain_auth_token),
+
+    # 支付宝支付相关接口
+    path('alipay/return/', AlipayView.as_view()),
 
     url(r'^login/', TokenObtainPairView.as_view(), name='login'),
     url(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

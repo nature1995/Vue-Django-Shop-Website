@@ -10,6 +10,9 @@ from goods.models import Goods
 from goods.serializers import GoodsSerializer
 from .models import ShoppingCart, OrderInfo, OrderGoods
 
+from VueDjangoShopWebsite.settings import ali_pub_key_path, private_key_path
+from utils.alipay import AliPay
+
 
 class ShopCartSerializer(serializers.Serializer):
     # 使用Serializer本身最好, 因为它是灵活性最高的。
@@ -91,6 +94,28 @@ class OrderSerializer(serializers.ModelSerializer):
         attrs["order_sn"] = self.generate_order_sn()
         return attrs
 
+    # 支付订单的url
+    alipay_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_alipay_url(self, obj):
+        alipay = AliPay(
+            appid="2016101800716810",
+            app_notify_url="http://139.9.118.108:8000/alipay/return/",
+            app_private_key_path=private_key_path,
+            alipay_public_key_path=ali_pub_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            debug=True,  # 默认False,
+            return_url="http://139.9.118.108:8000/alipay/return/"
+        )
+
+        url = alipay.direct_pay(
+            subject=obj.order_sn,
+            out_trade_no=obj.order_sn,
+            total_amount=obj.order_mount,
+        )
+        re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+
+        return re_url
+
     class Meta:
         model = OrderInfo
         fields = "__all__"
@@ -107,6 +132,28 @@ class OrderGoodsSerialzier(serializers.ModelSerializer):
 class OrderDetailSerializer(serializers.ModelSerializer):
     # 一个订单有多个订单商品项
     goods = OrderGoodsSerialzier(many=True)
+
+    # 支付订单的url
+    alipay_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_alipay_url(self, obj):
+        alipay = AliPay(
+            appid="2016101800716810",
+            app_notify_url="http://139.9.118.108:8000/alipay/return/",
+            app_private_key_path=private_key_path,
+            alipay_public_key_path=ali_pub_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            debug=True,  # 默认False,
+            return_url="http://139.9.118.108:8000/alipay/return/"
+        )
+
+        url = alipay.direct_pay(
+            subject=obj.order_sn,
+            out_trade_no=obj.order_sn,
+            total_amount=obj.order_mount,
+        )
+        re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+
+        return re_url
 
     class Meta:
         model = OrderInfo

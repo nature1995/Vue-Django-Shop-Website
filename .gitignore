@@ -146,3 +146,5 @@ VueDjangoShopWebsite/local_settings.py
 *.xml
 
 .idea/VueDjangoShopWebsite.iml
+
+apps/trade/keys/*
