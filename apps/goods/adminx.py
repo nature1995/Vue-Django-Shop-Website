@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 import xadmin
-from .models import Goods, GoodsCategory, GoodsImage, GoodsCategoryBrand, Banner
+from xadmin.views import BaseAdminView
+from .models import Goods, GoodsCategory, GoodsImage, GoodsCategoryBrand, Banner, IndexAd
 
 
 class GoodsAdmin(object):
@@ -28,7 +29,7 @@ class GoodsCategoryAdmin(object):
     search_fields = ['name', ]
 
 
-class GoodsBrandAdmin(object):
+class GoodsBrandAdmin(BaseAdminView):
     list_display = ["category", "image", "name", "desc"]
 
     def get_context(self):
@@ -42,7 +43,19 @@ class BannerGoodsAdmin(object):
     list_display = ["goods", "image", "index"]
 
 
+class IndexAdAdmin(BaseAdminView):
+    list_display = ["category", "goods"]
+
+    def get_context(self):
+        context = super(IndexAdAdmin, self).get_context()
+        if 'form' in context:
+            context['form'].fields['category'].queryset = GoodsCategory.objects.filter(category_type=1)
+        return context
+
+
 xadmin.site.register(Goods, GoodsAdmin)
 xadmin.site.register(GoodsCategory, GoodsCategoryAdmin)
 xadmin.site.register(Banner, BannerGoodsAdmin)
 xadmin.site.register(GoodsCategoryBrand, GoodsBrandAdmin)
+
+xadmin.site.register(IndexAd, IndexAdAdmin)

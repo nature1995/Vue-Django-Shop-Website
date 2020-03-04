@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from utils.permissions import IsOwnerOrReadOnly
 from .serializers import ShopCartSerializer, ShopCartDetailSerializer, OrderSerializer, OrderDetailSerializer
@@ -13,9 +14,6 @@ from datetime import datetime
 from utils.alipay import AliPay
 from rest_framework.views import APIView
 from VueDjangoShopWebsite.settings import ali_pub_key_path, private_key_path
-from rest_framework.response import Response
-
-
 # Create your views here.
 
 
@@ -34,32 +32,34 @@ class ShopCartViewset(viewsets.ModelViewSet):
     serializer_class = ShopCartSerializer
     lookup_field = "goods_id"
 
-    # # 库存数-1
-    # def perform_create(self, serializer):
-    #     shop_cart = serializer.save()
-    #     goods = shop_cart.goods
-    #     goods.goods_num -= shop_cart.nums
-    #     goods.save()
-    #
-    # # 库存数+1
-    # def perform_destroy(self, instance):
-    #     goods = instance.goods
-    #     goods.goods_num += instance.nums
-    #     goods.save()
-    #     # 取goods在del之前取之后就被删掉了
-    #     instance.delete()
-    #
-    # # 更新库存
-    # def perform_update(self, serializer):
-    #     existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
-    #     existed_nums = existed_record.nums
-    #     # 先保存之前的数据existed_nums
-    #     saved_record = serializer.save()
-    #     # 变化的数量
-    #     nums = saved_record.nums - existed_nums
-    #     goods = saved_record.goods
-    #     goods.goods_num -= nums
-    #     goods.save()
+    # 库存数-1
+    def perform_create(self, serializer):
+        shop_cart = serializer.save()
+        goods = shop_cart.goods
+        goods.goods_num -= shop_cart.nums
+        goods.save()
+
+    # 库存数+1
+    def perform_destroy(self, instance):
+        goods = instance.goods
+        goods.goods_num += instance.nums
+        goods.save()
+        # 取goods在del之前取之后就被删掉了
+        instance.delete()
+
+    # 更新库存,修改可能是增加页可能是减少
+    def perform_update(self, serializer):
+        # 首先获取修改之前的库存数量
+        existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
+        existed_nums = existed_record.nums
+        # 先保存之前的数据existed_nums
+        saved_record = serializer.save()
+        # 变化的数量
+        nums = saved_record.nums - existed_nums
+        goods = saved_record.goods
+        # 因为是库存数，所以是减去nums
+        goods.goods_num -= nums
+        goods.save()
 
     def get_serializer_class(self):
         if self.action == 'list':

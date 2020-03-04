@@ -28,7 +28,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from goods.views import GoodsListViewSet, CategoryViewset, BannerViewset
+from goods.views import GoodsListViewSet, CategoryViewset, BannerViewset, IndexCategoryViewset
 from trade.views import ShopCartViewset, OrderViewset, AlipayView
 from users.views import SmsCodeViewset, UserViewset
 from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
@@ -59,6 +59,8 @@ router.register(r'shopcarts', ShopCartViewset, basename="shopcarts")
 router.register(r'orders', OrderViewset, basename="orders")
 # 首页banner轮播图url
 router.register(r'banners', BannerViewset, basename="banners")
+# 首页系列商品展示url
+router.register(r'indexgoods', IndexCategoryViewset, basename="indexgoods")
 
 
 urlpatterns = [
