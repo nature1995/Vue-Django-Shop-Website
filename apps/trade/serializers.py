@@ -74,7 +74,7 @@ class OrderSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault()
     )
 
-    pay_status = serializers.CharField(read_only=True)
+    pay_status = serializers.CharField(read_only=True, allow_null=True)
     trade_no = serializers.CharField(read_only=True)
     order_sn = serializers.CharField(read_only=True)
     pay_time = serializers.DateTimeField(read_only=True)

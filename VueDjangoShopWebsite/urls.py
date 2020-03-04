@@ -17,6 +17,7 @@ Including another URLconf
 from django.urls import path, re_path, include
 from django.conf.urls import url
 from django.views.static import serve
+from django.views.generic import TemplateView
 
 from VueDjangoShopWebsite.settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
@@ -74,7 +75,10 @@ urlpatterns = [
     url(r'^api-token-auth/', views.obtain_auth_token),
 
     # 支付宝支付相关接口
-    path('alipay/return/', AlipayView.as_view()),
+    url(r'^alipay/return/', AlipayView.as_view()),
+
+    # 首页
+    url(r'^index/', TemplateView.as_view(template_name='index.html'), name='index'),
 
     url(r'^login/', TokenObtainPairView.as_view(), name='login'),
     url(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

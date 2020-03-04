@@ -123,45 +123,45 @@ class AliPay(object):
 
 
 if __name__ == "__main__":
-    return_url = 'http://139.9.118.108:8000/?total_amount=100.00&timestamp=2017-08-15+23%3A53%3A34&sign=e9E9UE0AxR84NK8TP1CicX6aZL8VQj68ylugWGHnM79zA7BKTIuxxkf%2FvhdDYz4XOLzNf9pTJxTDt8tTAAx%2FfUAJln4WAeZbacf1Gp4IzodcqU%2FsIc4z93xlfIZ7OLBoWW0kpKQ8AdOxrWBMXZck%2F1cffy4Ya2dWOYM6Pcdpd94CLNRPlH6kFsMCJCbhqvyJTflxdpVQ9kpH%2B%2Fhpqrqvm678vLwM%2B29LgqsLq0lojFWLe5ZGS1iFBdKiQI6wZiisBff%2BdAKT9Wcao3XeBUGigzUmVyEoVIcWJBH0Q8KTwz6IRC0S74FtfDWTafplUHlL%2Fnf6j%2FQd1y6Wcr2A5Kl6BQ%3D%3D&trade_no=2017081521001004340200204115&sign_type=RSA2&auth_app_id=2016080600180695&charset=utf-8&seller_id=2088102170208070&method=alipay.trade.page.pay.return&app_id=2016101800716810&out_trade_no=20170202185&version=1.0'
+    return_url = 'http://139.9.118.108:8000/alipay/return/?charset=utf-8&out_trade_no=20200304044018119&method=alipay.trade.page.pay.return&total_amount=400.00&sign=DArBvjdxnpLLFmmlM7pgYdhb3BRczpUS1O34GRXxQDx%2B%2FlxPDDuhtFUU5Gm5KMESv8LTrjwCZj6ZoExlqP3dtUvcLmhU1QZO2xs9JmEiY3OpW06h3pLA7VMr7vwrVecmCaLCZKeuuckZY42yY0xP7g3y8mKzfQZFijIZGdfGMktj5TQQiFd%2BHVXTFdMMFilL2F32Xl7AyUDB0ngqsYVwKuG1GfPRH0%2BEEW4rYXXlW78JUj0Gk7gGTPEIArogEB5RQXkWhXnBhX4VT%2BESHUQutqBa13FafMbpkkeT2wZrGzK2seEiVWbSpzyTlX2Bq2CHlIvmAUp8qhet7kLTZYqzEQ%3D%3D&trade_no=2020030422001405290500893229&auth_app_id=2016101800716810&version=1.0&app_id=2016101800716810&sign_type=RSA2&seller_id=2088102180158015&timestamp=2020-03-04+13%3A39%3A42'
     o = urlparse(return_url)
     query = parse_qs(o.query)
     processed_query = {}
     ali_sign = query.pop("sign")[0]
     print(ali_sign)
 
-    # 测试用例
-    alipay = AliPay(
-        # appid在沙箱环境中就可以找到
-        appid="2016101800716810",
-        # 这个值先不管，在与vue的联调中介绍
-        app_notify_url="http://139.9.118.108:8000/alipay/return/",
-        # 我们自己商户的密钥
-        app_private_key_path="../trade/keys/private_2048.txt",
-        # 支付宝的公钥
-        alipay_public_key_path="../trade/keys/alipay_key_2048.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
-        # debug为true时使用沙箱的url。如果不是用正式环境的url
-        debug=True,  # 默认False,
-
-        # 先不用管，后面vue解释
-        return_url="http://139.9.118.108:8000/alipay/return/"
-    )
-
-    for key, value in query.items():
-        processed_query[key] = value[0]
-    print(alipay.verify(processed_query, ali_sign))
-
-    # 直接支付:生成请求的字符串。
-    url = alipay.direct_pay(
-        # 订单标题
-        subject="测试订单",
-        # 我们商户自行生成的订单号
-        out_trade_no="20180314006",
-        # 订单金额
-        total_amount=9999,
-        return_url="http://139.9.118.108:8000/alipay/return/"
-    )
-    # 将生成的请求字符串拿到我们的url中进行拼接
-    re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
-
-    print(re_url)
+    # # 测试用例
+    # alipay = AliPay(
+    #     # appid在沙箱环境中就可以找到
+    #     appid="2016101800716810",
+    #     # 这个值先不管，在与vue的联调中介绍
+    #     app_notify_url="http://139.9.118.108:8000/alipay/return/",
+    #     # 我们自己商户的密钥
+    #     app_private_key_path="../trade/keys/private_2048.txt",
+    #     # 支付宝的公钥
+    #     alipay_public_key_path="../trade/keys/alipay_key_2048.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+    #     # debug为true时使用沙箱的url。如果不是用正式环境的url
+    #     debug=True,  # 默认False,
+    #
+    #     # 先不用管，后面vue解释
+    #     return_url="http://139.9.118.108:8000/alipay/return/"
+    # )
+    #
+    # for key, value in query.items():
+    #     processed_query[key] = value[0]
+    # print(alipay.verify(processed_query, ali_sign))
+    #
+    # # 直接支付:生成请求的字符串。
+    # url = alipay.direct_pay(
+    #     # 订单标题
+    #     subject="测试订单",
+    #     # 我们商户自行生成的订单号
+    #     out_trade_no="20180314006",
+    #     # 订单金额
+    #     total_amount=400.0,
+    #     return_url="http://139.9.118.108:8000/alipay/return/"
+    # )
+    # # 将生成的请求字符串拿到我们的url中进行拼接
+    # re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+    #
+    # print(re_url)

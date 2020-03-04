@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
@@ -13,6 +14,8 @@ from utils.alipay import AliPay
 from rest_framework.views import APIView
 from VueDjangoShopWebsite.settings import ali_pub_key_path, private_key_path
 from rest_framework.response import Response
+
+
 # Create your views here.
 
 
@@ -139,14 +142,19 @@ class AlipayView(APIView):
         if verify_re is True:
             order_sn = processed_dict.get('out_trade_no', None)
             trade_no = processed_dict.get('trade_no', None)
-            trade_status = processed_dict.get('trade_status', None)
 
             existed_orders = OrderInfo.objects.filter(order_sn=order_sn)
             for existed_order in existed_orders:
-                existed_order.pay_status = trade_status
                 existed_order.trade_no = trade_no
                 existed_order.pay_time = datetime.now()
                 existed_order.save()
+
+            response = redirect("/index/#/app/home/member/order")
+            # response.set_cookie("nextPath","pay", max_age=3)
+            return response
+        else:
+            response = redirect("index")
+            return response
 
     def post(self, request):
         """
@@ -175,14 +183,11 @@ class AlipayView(APIView):
 
         # 如果验签成功
         if verify_re is True:
-            # 商户网站唯一订单号
             order_sn = processed_dict.get('out_trade_no', None)
-            # 支付宝系统交易流水号
             trade_no = processed_dict.get('trade_no', None)
-            # 交易状态
             trade_status = processed_dict.get('trade_status', None)
 
-            # 查询数据库中订单记录
+            # 查询数据库中存在的订单
             existed_orders = OrderInfo.objects.filter(order_sn=order_sn)
             for existed_order in existed_orders:
                 # 订单商品项
@@ -193,10 +198,10 @@ class AlipayView(APIView):
                     goods.sold_num += order_good.goods_num
                     goods.save()
 
-                # 更新订单状态
+                # 更新订单状态，填充支付宝给的交易凭证号。
                 existed_order.pay_status = trade_status
                 existed_order.trade_no = trade_no
                 existed_order.pay_time = datetime.now()
                 existed_order.save()
-            # 需要返回一个'success'给支付宝，如果不返回，支付宝会一直发送订单支付成功的消息
+            # 将success返回给支付宝，支付宝就不会一直不停的继续发消息了。
             return Response("success")
