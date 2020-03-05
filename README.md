@@ -1,7 +1,9 @@
-[Django REST framework+Vue 前后端分离生鲜超市](https://github.com/nature1995/Vue-Django-Shop-Website.git)
+# Django REST framework+Vue （生鲜超市后端代码）
+
 -------------------------------------------------------------------
-[![python3](https://img.shields.io/badge/python-3-blue.svg)]()
-[![django3.0.0](https://img.shields.io/badge/django-3.0.0-brightgreen.svg)]()
+
+[![python3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
+[![django3.0.0](https://img.shields.io/badge/django-3.0.0-brightgreen.svg)](https://www.djangoproject.com/)
 
 
 #### 前端：
@@ -21,10 +23,10 @@
 6. 修复部分前端问题。
 
 #### 项目资源
-[前端代码]()
-[后端代码]()
+[Vue前端代码](https://github.com/nature1995/Vue-Django-Shop-Frontend)  
+[Django后端代码](https://github.com/nature1995/Vue-Django-Shop-Website)
 
-[项目视频与原版文件]()
+项目视频与原版文件: 链接:https://pan.baidu.com/s/1elQ0DJ-b0hB6W4ihJcK3mQ  密码:ndzt
 
 -----------------------
 ## 项目内容
@@ -106,7 +108,7 @@ activate.bat #激活虚拟环境
 ```
 
 ### Vue环境搭建
-
+**国内:**
 1. node.js
 https://nodejs.org/
 
@@ -123,6 +125,20 @@ cnpm install
 4. 运行
 ```
 cnpm run dev
+```
+
+**国外:**
+1. node.js
+https://nodejs.org/
+
+2. 安装依赖
+```
+npm install
+```
+
+3. 运行
+```
+npm run dev
 ```
 
 ## 配置与可选配置
@@ -170,6 +186,7 @@ try:
 except ModuleNotFoundError as e:
     pass
 ```
+
 ## 参考文档
 Django3.0: https://docs.djangoproject.com/zh-hans/3.0/  
 Django REST framework: https://www.django-rest-framework.org/     
