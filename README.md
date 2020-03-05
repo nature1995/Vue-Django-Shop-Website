@@ -20,7 +20,8 @@
 3. 配合django-rest-framework-simplejwt修复第三方登录时，用户前端显示bug。
 4. 修复alipay密钥存储格式导致的Incorrect padding问题
 5. 修复热门搜索接口
-6. 修复部分前端问题。
+6. 可以切换数据库
+7. 修复部分前端问题。
 
 #### 项目资源
 [Vue前端代码](https://github.com/nature1995/Vue-Django-Shop-Frontend)  
@@ -88,7 +89,7 @@ Vue代码结构分析
 
 
 2. 安装
-```
+```bash
 pip install virtualenv
 
 # Mac
@@ -107,23 +108,47 @@ deactivate.bat #退出虚拟环境
 activate.bat #激活虚拟环境
 ```
 
+3. 数据库选择
+请选择其中一种数据库，新手推荐使用SQLite先运行，后面再数据同步与切换
+```python
+# 数据库选择SQLite
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+# 数据库选择MYSQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vuedjango',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        "OPTIONS": {"init_command": "SET default_storage_engine=INNODB;"}
+    }
+}
+```
+
 ### Vue环境搭建
 **国内:**
 1. node.js
 https://nodejs.org/
 
 2. cnpm
-```
+```bash
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
 3. 安装依赖
-```
+```bash
 cnpm install
 ```
 
 4. 运行
-```
+```bash
 cnpm run dev
 ```
 
@@ -142,18 +167,7 @@ npm run dev
 ```
 
 ## 配置与可选配置
-```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vuedjango',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        "OPTIONS": {"init_command": "SET default_storage_engine=INNODB;"}
-    }
-}
-
+```python
 # 腾讯云短信设置
 TENCENT_SECRET_ID = ''
 TENCENT_SECRET_KEY = ''
