@@ -61,6 +61,5 @@ xlwt==1.3.0
 djangorestframework-simplejwt
 pymysql
 tencentcloud-sdk-python
-pycryptodome
 drf-extensions
 django-redis

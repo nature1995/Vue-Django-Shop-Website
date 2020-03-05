@@ -9,6 +9,7 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.authentication import (
     SessionAuthentication, BasicAuthentication, TokenAuthentication
 )
@@ -17,11 +18,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from .models import (
-    Goods, GoodsCategory, Banner
+    Goods, GoodsCategory, Banner, HotSearchWords
 )
 from .filters import GoodsFilter
 from .serializers import (
-    GoodsSerializer, CategorySerializer, BannerSerializer, IndexCategorySerializer
+    GoodsSerializer, CategorySerializer, BannerSerializer,
+    IndexCategorySerializer, HotWordsSerializer
 )
 
 
@@ -72,6 +74,9 @@ class GoodsListViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.Retriev
     serializer_class = GoodsSerializer
     # 分页
     pagination_class = GoodsPagination
+    # 缓存
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
+
     # authentication_classes = (BasicAuthentication, SessionAuthentication, JWTAuthentication, )
     # permission_classes = [IsAuthenticated]
     # 设置三大常用过滤器之DjangoFilterBackend, SearchFilter
@@ -126,3 +131,11 @@ class IndexCategoryViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     # 获取is_tab=True（导航栏）里面的分类下的商品数据
     queryset = GoodsCategory.objects.filter(is_tab=True, name__in=["生鲜食品", "酒水饮料"])
     serializer_class = IndexCategorySerializer
+
+
+class HotSearchsViewset(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    获取热搜词列表
+    """
+    queryset = HotSearchWords.objects.all().order_by("-index")
+    serializer_class = HotWordsSerializer

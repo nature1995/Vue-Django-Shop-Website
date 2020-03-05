@@ -4,7 +4,8 @@
 # @File    : serializers.py
 from django.db.models import Q
 from rest_framework import serializers
-from goods.models import Goods, GoodsCategory, GoodsImage, Banner, GoodsCategoryBrand, IndexAd
+from goods.models import Goods, GoodsCategory, GoodsImage, \
+    Banner, GoodsCategoryBrand, IndexAd, HotSearchWords
 
 
 class CategorySerializer3(serializers.ModelSerializer):
@@ -85,6 +86,14 @@ class BannerSerializer(serializers.ModelSerializer):
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoodsCategoryBrand
+        fields = "__all__"
+
+
+class HotWordsSerializer(serializers.ModelSerializer):
+    add_time = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M')
+
+    class Meta:
+        model = HotSearchWords
         fields = "__all__"
 
 

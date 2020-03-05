@@ -28,10 +28,13 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from goods.views import GoodsListViewSet, CategoryViewset, BannerViewset, IndexCategoryViewset
+from goods.views import GoodsListViewSet, CategoryViewset, BannerViewset,\
+    IndexCategoryViewset, HotSearchsViewset
 from trade.views import ShopCartViewset, OrderViewset, AlipayView
 from users.views import SmsCodeViewset, UserViewset
-from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
+from user_operation.views import UserFavViewset, LeavingMessageViewset,\
+    AddressViewset
+# from utils.home_views import home_view
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -61,7 +64,8 @@ router.register(r'orders', OrderViewset, basename="orders")
 router.register(r'banners', BannerViewset, basename="banners")
 # 首页系列商品展示url
 router.register(r'indexgoods', IndexCategoryViewset, basename="indexgoods")
-
+# 热搜词
+router.register(r'hotsearchs', HotSearchsViewset, basename="hotsearchs")
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -84,7 +88,13 @@ urlpatterns = [
     # 首页
     url(r'^index/', TemplateView.as_view(template_name='index.html'), name='index'),
 
-    url(r'^login/', TokenObtainPairView.as_view(), name='login'),
+    url(r'^login/$', TokenObtainPairView.as_view(), name='login'),
     url(r'^api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     url(r'^api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    # 第三方登录
+    url('', include('social_django.urls', namespace='social')),
+
+    # 替换首页
+    # url(r'^/$', home_view, name='api_view'),
 ]

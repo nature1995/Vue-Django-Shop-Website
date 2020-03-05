@@ -148,3 +148,5 @@ VueDjangoShopWebsite/local_settings.py
 .idea/VueDjangoShopWebsite.iml
 
 apps/trade/keys/*
+
+apps/utils/weibo_login.py
