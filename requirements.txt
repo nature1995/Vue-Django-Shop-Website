@@ -63,3 +63,4 @@ pymysql
 tencentcloud-sdk-python
 drf-extensions
 django-redis
+sentry-sdk

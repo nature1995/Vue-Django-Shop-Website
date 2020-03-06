@@ -142,12 +142,12 @@ https://nodejs.org/
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
-3. 安装依赖
-```bash
-cnpm install
+4. 更改./src/api/api.js里的接口地址
+```js
+let local_host = 'http://127.0.0.1:8000';
 ```
 
-4. 运行
+5. 运行
 ```bash
 cnpm run dev
 ```
