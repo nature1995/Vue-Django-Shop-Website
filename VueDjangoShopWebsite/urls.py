@@ -35,6 +35,7 @@ from users.views import SmsCodeViewset, UserViewset
 from user_operation.views import UserFavViewset, LeavingMessageViewset,\
     AddressViewset
 # from utils.home_views import home_view
+# from utils.sentry_test import trigger_error
 import xadmin
 
 # goods_list = GoodsListViewSet.as_view({
@@ -97,4 +98,7 @@ urlpatterns = [
 
     # 替换首页
     # url(r'^/$', home_view, name='api_view'),
+
+    # sentry测试
+    # url(r'^sentry-debug/', trigger_error, name='sentry-debug'),
 ]

@@ -199,6 +199,16 @@ try:
     from .local_settings import *
 except ModuleNotFoundError as e:
     pass
+
+# sentry初始化
+sentry_sdk.init(
+    dsn="You DNS address",
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 ```
 
 ## 参考文档
