@@ -165,6 +165,13 @@ npm install
 ```
 npm run dev
 ```
+## 数据库部署
+安装MySQL后在数据库中创建名为vueshop库，用下面代码导入SQL即可。
+```bash
+cd Vue-Django-Shop-Website/db_tools/
+python import_category_data.py
+python import_goods_data.py
+```
 
 ## 配置与可选配置
 ```python
